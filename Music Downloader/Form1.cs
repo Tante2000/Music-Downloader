@@ -39,7 +39,12 @@ namespace Music_Downloader
         public static About about;
         public static Form1 mainform;
         private double Timec = 0; //s
-        //API 1网易云 2酷狗 3QQ 4酷我 5百度
+		/// <summary>
+		/// 获取音乐下载链接
+		/// </summary>
+		/// <param name="id">音乐ID</param>
+		/// <param name="musicapicode">音乐api接口API 1网易云 2酷狗 3QQ 4酷我 5百度</param>
+		/// <returns></returns>
         public List<SearchResult> GetMusiclistJson(string id, int musicapicode)
         {
             string url = null;
@@ -49,7 +54,8 @@ namespace Music_Downloader
             if (musicapicode == 1)
             {
                 string left = "playlist?id=";
-                if (id.IndexOf(left) != -1)
+				//存在  playlist?id=  则满足条件
+				if (id.IndexOf(left) != -1)
                 {
                     if (id.IndexOf("&userid") != -1)
                     {
@@ -285,6 +291,11 @@ namespace Music_Downloader
                 return e.Message;
             }
         }
+		/// <summary>
+		/// 获取QQ音乐Url
+		/// </summary>
+		/// <param name="url"></param>
+		/// <returns></returns>
         public string GetRealUrl(string url)
         {
             HttpWebRequest wbrequest = (HttpWebRequest)WebRequest.Create(url);
@@ -325,7 +336,9 @@ namespace Music_Downloader
             if ((string)id == null || (string)id == "")
             {
                 MessageBox.Show("ID不能为空", caption: "警告：");
-                return;
+				
+			
+				return ;
             }
             if (id.ToString().IndexOf("qq.com") != -1)
             {
@@ -339,7 +352,7 @@ namespace Music_Downloader
             if (Searchresult == null)
             {
                 MessageBox.Show("歌单获取错误", caption: "警告：");
-                listView1.Clear();
+				
                 return;
             }
             listView1.Items.Clear();
@@ -581,6 +594,9 @@ namespace Music_Downloader
                 Searchbutton_Click(this, new EventArgs());
             }
         }
+		/// <summary>
+		/// 储存歌曲相关信息
+		/// </summary>
         public class SearchResult
         {
             public string SongName;
@@ -591,10 +607,11 @@ namespace Music_Downloader
             public string id;
         }
         /// <summary>
-        /// 音乐搜索
+        /// 音乐搜索 （音乐名称，音乐接口，音乐品质）
         /// </summary>
-        /// <param name="key">关键词</param>
-        /// <param name="api"></param>
+        /// <param name="key">关键词（歌名）</param>
+        /// <param name="api">接口</param>
+		/// <param name="quality">音质</param>
         /// <returns></returns>
         public List<SearchResult> SearchMusic(string key, int api, string quality)
         {
@@ -773,6 +790,10 @@ namespace Music_Downloader
             }
             return null;
         }
+		/// <summary>
+		/// 音乐接口
+		/// </summary>
+		/// <returns></returns>
         public int GetApiCode()
         {
             if (radioButton1.Checked)
@@ -797,6 +818,10 @@ namespace Music_Downloader
             }
             return 0;
         }
+		/// <summary>
+		/// 音质相关
+		/// </summary>
+		/// <returns></returns>
         public string GetQuality()
         {
             if (metroComboBox1.SelectedIndex == 0)
@@ -821,6 +846,9 @@ namespace Music_Downloader
             }
             return "";
         }
+		/// <summary>
+		/// 搜索
+		/// </summary>
         public void SearchThread()
         {
             if (SearchtextBox.Text == null || SearchtextBox.Text == "")
@@ -847,6 +875,11 @@ namespace Music_Downloader
             Musicnumlabel.Text = "歌曲总数：" + listView1.Items.Count;
             metroButton1.Enabled = true;
         }
+		/// <summary>
+		/// 搜索按钮执行事件
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void Searchbutton_Click(object sender, EventArgs e)
         {
             skinTabControl1.SelectedIndex = 0;
@@ -861,6 +894,11 @@ namespace Music_Downloader
             {
             }
         }
+		/// <summary>
+		/// 下载所有音乐执行事件
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
             try
